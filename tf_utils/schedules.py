@@ -56,8 +56,8 @@ class OneCycleLR(tf.keras.optimizers.schedules.LearningRateSchedule):
             lr = tf.cond(warmup_cond, lambda: tf.math.divide_no_nan(self.lr-self.lr_start , warmup_steps) * step + self.lr_start, lambda: self.lr)
         elif self.warmup_type == 'exponential':
             factor = tf.pow(self.lr_start, 1/warmup_steps)
-            # lr = tf.cond(warmup_cond, lambda: (self.lr - self.lr_start) * factor**(warmup_steps - step) + self.lr_start, lambda: self.lr)
-            lr = tf.cond(warmup_cond, lambda: (self.lr - self.lr_start) * factor**step + self.lr_start, lambda: self.lr)
+            lr = tf.cond(warmup_cond, lambda: (self.lr - self.lr_start) * factor**(warmup_steps - step) + self.lr_start, lambda: self.lr)
+            # lr = tf.cond(warmup_cond, lambda: (self.lr - self.lr_start) * factor**step + self.lr_start, lambda: self.lr)
         elif self.warmup_type == 'cosine':
             lr = tf.cond(warmup_cond, lambda: 0.5 * (self.lr - self.lr_start) * (1 + tf.cos(3.14159265359 * (warmup_steps - step)  / warmup_steps)) + self.lr_start, lambda:self.lr)
         else:
